@@ -1,0 +1,10 @@
+{
+  "numberOfElements": 2,
+  "dispersion": {
+    "a": 0.2,
+    "b": 0.1,
+    "c": 0.2,
+    "d": 0.1,
+    "e": 0.4
+  }
+}
