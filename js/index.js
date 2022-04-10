@@ -23,12 +23,25 @@ class Huffman {
         this.codeAbc = [];
         this.messageAbc = [];
         this.dispersion = [];
-        this.parseInputFileText(inputText);
-        this.orderedMessageAbcAndDispersion();
-
+        this.#parseInputFileText(inputText);
+        this.#orderMessageAbcAndDispersion();
+        this.#generateCodeTree();
     }
 
-    parseInputFileText(inputText) {
+    getCodeAbc() {
+        return this.codeAbc;
+    }
+
+    getMessageAbcWithDispersion() {
+        let output = "";
+        for (let i = 0; i < this.messageAbc.length; i++) {
+            output += this.messageAbc[i] + ": " + this.dispersion[i] + "\n";
+        }
+        console.log(output);
+        return output;
+    }
+
+    #parseInputFileText(inputText) {
         const readObj = JSON.parse(inputText);
         console.log(Object.keys(readObj.dispersion));
         // TODO: Checks!
@@ -38,16 +51,16 @@ class Huffman {
         for (let abcElement of this.messageAbc) {
             this.dispersion.push(readObj.dispersion[abcElement]);
         }
-        this.orderedMessageAbcAndDispersion();
+        this.#orderMessageAbcAndDispersion();
     }
 
     #createCodeAbc(readObj) {
-        for (let i = 0; i < readObj.numberOfElements; i++) {
+        for (let i = 0; i < readObj.numberOfCodeAbcElements; i++) {
             this.codeAbc.push(String.fromCharCode(ASCII_A + i));
         }
     }
 
-    orderedMessageAbcAndDispersion() {
+    #orderMessageAbcAndDispersion() {
         for (let i = 0; i < this.messageAbc.length - 1; i++) {
             let minI = i;
             for (let j = i + 1; j < this.messageAbc.length; j++) {
@@ -66,17 +79,20 @@ class Huffman {
         }
     }
 
-    getCodeAbc() {
-        return this.codeAbc;
-    }
+    #generateCodeTree() {
 
-    getMessageAbcWithDispersion() {
-        let output = "";
-        for (let i = 0; i < this.messageAbc.length; i++) {
-            output += this.messageAbc[i] + ": " + this.dispersion[i] + "\n";
-        }
-        console.log(output);
-        return output;
+    }
+}
+
+class CodeTree {
+
+    /**
+     * Constructs CodeTree
+     * @param dispersion An ordered array of floating point numbers whose sum is 1.
+     * @param numberOfCodeAbcElements Number of elements in code ABC.
+     */
+    constructor(dispersion, numberOfCodeAbcElements) {
+
     }
 }
 
