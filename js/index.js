@@ -25,7 +25,14 @@ class Huffman {
         this.dispersion = [];
         this.#parseInputFileText(inputText);
         this.#orderMessageAbcAndDispersion();
-        this.#generateCodeTree();
+        this.codeTree = new CodeTree(this.dispersion, this.codeAbc);
+    }
+
+    getCoding() {
+        const codes = this.codeTree.getLeafCodes();
+        return codes.map((e, i) => {
+            return [this.messageAbc[i], e];
+        });
     }
 
     getCodeAbc() {
@@ -78,10 +85,6 @@ class Huffman {
             }
         }
     }
-
-    #generateCodeTree() {
-
-    }
 }
 
 class CodeTree {
@@ -94,8 +97,19 @@ class CodeTree {
     constructor(dispersion, codeAbc) {
         this.nodes = [];
         this.branchingFactor = codeAbc.length;
-        this.leafCodes = [];
+        this.codeAbc = codeAbc;
         this.#buildSelf(dispersion);
+    }
+
+    getLeafCodes() {
+        let leafCodes = [];
+        for (let node of this.nodes) {
+            if (!node.isLeaf) {
+                break;
+            }
+            leafCodes.push(node.code);
+        }
+        return leafCodes;
     }
 
     #buildSelf(dispersion) {
@@ -114,6 +128,7 @@ class CodeTree {
     }
 
     #mergeElements(currentIndices) {
+        console.log(currentIndices);
         let probSum = 0;
         const children = [];
         const loopStop = Math.min(currentIndices.length, this.branchingFactor);
@@ -137,11 +152,23 @@ class CodeTree {
         this.#mergeElements(currentIndices);
     }
 
-    #setCodes() {
-        // TODO
+    #setCodes(node, prevCodes) {
+        if (node.isLeaf) {
+            node.code = prevCodes;
+            return;
+        }
+        for (let i in node.children) {
+            let code = JSON.parse(JSON.stringify(prevCodes));
+            code.push(this.codeAbc[i]);
+            this.#setCodes(node.children, code);
+        }
     }
 }
 
 function generateInputAssessment(huffman) {
-    return "Kód ABC: " + huffman.getCodeAbc() + "\n\nÜzenet ABC és eloszlás:\n" + huffman.getMessageAbcWithDispersion()
+    let codingTxt = "";
+    for (let pair of huffman.getCoding()) {
+        codingTxt += pair[0] + ": " + pair[1] + "\n";
+    }
+    return "Kód ABC: " + huffman.getCodeAbc() + "\n\nÜzenet ABC és eloszlás:\n" + huffman.getMessageAbcWithDispersion() + codingTxt;
 }
