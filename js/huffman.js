@@ -1,3 +1,6 @@
+const ASCII_A = 65;
+const ASCII_ZERO = 48;
+
 class Huffman {
 
     constructor(inputText) {
@@ -16,6 +19,15 @@ class Huffman {
         });
     }
 
+    getCodingTextified() {
+        const codes = this.codeTree.getLeafCodes();
+        const codesTextified = {};
+        for (let i in codes) {
+            codesTextified[this.messageAbc[i]] = codes[i].join('');
+        }
+        return codesTextified;
+    }
+
     getCodeAbc() {
         return this.codeAbc;
     }
@@ -29,11 +41,19 @@ class Huffman {
         return output;
     }
 
+    calcEntropy() {
+        return 0;
+    }
+
+    calcEfficiency() {
+        return 0;
+    }
+
     #parseInputFileText(inputText) {
         const readObj = JSON.parse(inputText);
         console.log(Object.keys(readObj.dispersion));
         // TODO: Checks!
-        this.#createCodeAbc(readObj);
+        this.#createCodeAbc(readObj.numberOfCodeAbcElements);
         // TODO: Checks!
         this.messageAbc = Object.keys(readObj.dispersion);
         for (let abcElement of this.messageAbc) {
@@ -42,8 +62,23 @@ class Huffman {
         this.#orderMessageAbcAndDispersion();
     }
 
-    #createCodeAbc(readObj) {
-        for (let i = 0; i < readObj.numberOfCodeAbcElements; i++) {
+    #createCodeAbc(numberOfCodeAbcElements) {
+        if (numberOfCodeAbcElements <= 10) {
+            this.#createNumericCodeAbc(numberOfCodeAbcElements);
+        } else {
+            this.#createAlphabeticCodeAbc(numberOfCodeAbcElements);
+        }
+
+    }
+
+    #createNumericCodeAbc(numberOfCodeAbcElements) {
+        for (let i = 0; i < numberOfCodeAbcElements; i++) {
+            this.codeAbc.push(String.fromCharCode(ASCII_ZERO + i));
+        }
+    }
+
+    #createAlphabeticCodeAbc(numberOfCodeAbcElements) {
+        for (let i = 0; i < numberOfCodeAbcElements; i++) {
             this.codeAbc.push(String.fromCharCode(ASCII_A + i));
         }
     }
@@ -65,10 +100,6 @@ class Huffman {
                 this.dispersion[minI] = tmp;
             }
         }
-    }
-
-    #buildCodeTree() {
-
     }
 }
 

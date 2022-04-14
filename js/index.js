@@ -1,4 +1,3 @@
-const ASCII_A = 65;
 let huffman = undefined;
 
 function readFile(input) {
@@ -21,15 +20,33 @@ function readFile(input) {
 function generateInputAssessment(huffman) {
     let codingTxt = "";
     for (let pair of huffman.getCoding()) {
-        codingTxt += pair[0] + ": " + pair[1] + "\n";
+        codingTxt += pair[0] + ": " + pair[1].join('') + "\n";
     }
-    return "Kód ABC: " + huffman.getCodeAbc() + "\n\nÜzenet ABC és eloszlás:\n" + huffman.getMessageAbcWithDispersion() + codingTxt;
+    return "Kód ABC: " + huffman.getCodeAbc() + "\n\nÜzenet ABC és eloszlás:\n" + huffman.getMessageAbcWithDispersion() + '\n' + codingTxt;
 }
 
-function download(filename, text) {
+function generateFileOutput() {
+    const coding = huffman.getCodingTextified();
+    const entropy = huffman.calcEntropy();
+    const efficiency = huffman.calcEfficiency();
+    return {
+        "Entrópia": entropy,
+        "Hatásfok": efficiency,
+        "Kódolás": coding
+    };
+}
+
+function download() {
+    if (huffman === undefined) {
+        alert("Nothing encoded yet! Upload a file to encode!");
+        return;
+    }
+    const inputFilename = document.getElementById("inputFile").files[0].name;
+    const outputFilename = inputFilename.split('.')[0] + "_out" + ".json";
+    const fileContent = JSON.stringify(generateFileOutput(), null, 2);
     const element = document.createElement('a');
-    element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(text));
-    element.setAttribute('download', filename);
+    element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(fileContent));
+    element.setAttribute('download', outputFilename);
 
     element.style.display = 'none';
     document.body.appendChild(element);
