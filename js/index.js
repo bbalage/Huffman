@@ -27,11 +27,11 @@ function generateInputAssessment(huffman) {
 
 function generateFileOutput() {
     const coding = huffman.getCodingTextified();
-    const entropy = huffman.calcEntropy();
-    const efficiency = huffman.calcEfficiency();
+    const entropy = huffman.getEntropy()
     return {
         "Entrópia": entropy,
-        "Hatásfok": efficiency,
+        "Átlagos kódhossz": huffman.getAvgCodeLength(),
+        "Hatásfok": huffman.getEfficiency(),
         "Kódolás": coding
     };
 }

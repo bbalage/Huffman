@@ -10,6 +10,21 @@ class Huffman {
         this.#parseInputFileText(inputText);
         this.#orderMessageAbcAndDispersion();
         this.codeTree = new CodeTree(this.dispersion, this.codeAbc);
+        this.entropy = this.#calcEntropy();
+        this.avgCodeLength = this.#calcAvgCodeLength();
+        this.efficiency = this.#calcEfficiency();
+    }
+
+    getEntropy() {
+        return this.entropy;
+    }
+
+    getAvgCodeLength() {
+        return this.avgCodeLength;
+    }
+
+    getEfficiency() {
+        return this.efficiency;
     }
 
     getCoding() {
@@ -41,12 +56,25 @@ class Huffman {
         return output;
     }
 
-    calcEntropy() {
-        return 0;
+    #calcEntropy() {
+        let entropy_tmp = 0;
+        for (let prob of this.dispersion) {
+            entropy_tmp += prob * Math.log2(prob);
+        }
+        return -1 * entropy_tmp;
     }
 
-    calcEfficiency() {
-        return 0;
+    #calcAvgCodeLength() {
+        const codes = this.codeTree.getLeafCodes();
+        let avgCodeLength = 0;
+        for (let i in codes) {
+            avgCodeLength += codes[i].length * this.dispersion[i];
+        }
+        return avgCodeLength;
+    }
+
+    #calcEfficiency() {
+        return this.entropy / (this.avgCodeLength * Math.log2(this.codeAbc.length));
     }
 
     #parseInputFileText(inputText) {
@@ -114,7 +142,6 @@ class CodeTree {
         this.nodes = [];
         this.branchingFactor = codeAbc.length;
         this.codeAbc = codeAbc;
-        this.dispersion
         this.#buildSelf(dispersion);
     }
 
