@@ -6,7 +6,7 @@ class Huffman {
         this.dispersion = [];
         this.#parseInputFileText(inputText);
         this.#orderMessageAbcAndDispersion();
-        // this.codeTree = new CodeTree(this.dispersion, this.codeAbc);
+        this.codeTree = new CodeTree(this.dispersion, this.codeAbc);
     }
 
     getCoding() {
@@ -66,6 +66,10 @@ class Huffman {
             }
         }
     }
+
+    #buildCodeTree() {
+
+    }
 }
 
 class CodeTree {
@@ -79,6 +83,7 @@ class CodeTree {
         this.nodes = [];
         this.branchingFactor = codeAbc.length;
         this.codeAbc = codeAbc;
+        this.dispersion
         this.#buildSelf(dispersion);
     }
 
@@ -115,7 +120,7 @@ class CodeTree {
         const loopStop = Math.min(currentIndices.length, this.branchingFactor);
         const newIndex = this.nodes.length;
         for (let i = 0; i < loopStop; i++) {
-            const index = currentIndeces.shift();
+            const index = currentIndices.shift();
             probSum += this.nodes[index].prob;
             this.nodes[index].parent = newIndex;
             children.push(index);
@@ -127,7 +132,8 @@ class CodeTree {
             children: children,
             code: undefined
         });
-        if (currentIndices.length === 1) {
+        this.#addIndexOrdered(currentIndices, newIndex);
+        if (currentIndices.length <= 1) {
             return;
         }
         this.#mergeElements(currentIndices);
@@ -141,7 +147,16 @@ class CodeTree {
         for (let i in node.children) {
             let code = JSON.parse(JSON.stringify(prevCodes));
             code.push(this.codeAbc[i]);
-            this.#setCodes(node.children, code);
+            this.#setCodes(this.nodes[node.children[i]], code);
+        }
+    }
+
+    #addIndexOrdered(currentIndices, newIndex) {
+        for (let i in currentIndices) {
+            if (this.nodes[currentIndices[i]].prob <= this.nodes[newIndex].prob) {
+                currentIndices.splice(i + 1, 0, newIndex);
+                break;
+            }
         }
     }
 }

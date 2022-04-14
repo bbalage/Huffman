@@ -1,4 +1,5 @@
 const ASCII_A = 65;
+let huffman = undefined;
 
 function readFile(input) {
     const file = input.files[0];
@@ -8,7 +9,7 @@ function readFile(input) {
 
     reader.onload = function () {
         const readDataTextArea = document.getElementById("readData");
-        const huffman = new Huffman(reader.result);
+        huffman = new Huffman(reader.result);
         readDataTextArea.innerText = generateInputAssessment(huffman);
     };
 
@@ -18,11 +19,11 @@ function readFile(input) {
 }
 
 function generateInputAssessment(huffman) {
-    /*let codingTxt = "";
+    let codingTxt = "";
     for (let pair of huffman.getCoding()) {
         codingTxt += pair[0] + ": " + pair[1] + "\n";
-    }*/
-    return "Kód ABC: " + huffman.getCodeAbc() + "\n\nÜzenet ABC és eloszlás:\n" + huffman.getMessageAbcWithDispersion();
+    }
+    return "Kód ABC: " + huffman.getCodeAbc() + "\n\nÜzenet ABC és eloszlás:\n" + huffman.getMessageAbcWithDispersion() + codingTxt;
 }
 
 function download(filename, text) {
