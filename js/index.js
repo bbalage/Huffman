@@ -18,19 +18,28 @@ function readFile(input) {
 }
 
 function generateInputAssessment(huffman) {
-    let codingTxt = "";
+    let codingTxt = "Generált kódolás:\n";
     for (let pair of huffman.getCoding()) {
         codingTxt += pair[0] + ": " + pair[1].join('') + "\n";
     }
-    return "Kód ABC: " + huffman.getCodeAbc() + "\n\nÜzenet ABC és eloszlás:\n" + huffman.getMessageAbcWithDispersion() + '\n' + codingTxt;
+    return "Kód ABC: "
+        + huffman.getCodeAbc()
+        + "\n\nÜzenet ABC és eloszlás:\n"
+        + huffman.getMessageAbcWithDispersion()
+        + '\n'
+        + codingTxt
+        + "\nEntrópia: "
+        + huffman.getEntropy()
+        + "\nÁtlagos kódhossz: "
+        + huffman.getAvgCodeLength()
+        + "\nHatásfok: "
+        + huffman.getEfficiency();
 }
 
 function generateFileOutput() {
     const coding = huffman.getCodingTextified();
-    const entropy = huffman.getEntropy()
     return {
-        "Entrópia": entropy,
-        "Átlagos kódhossz": huffman.getAvgCodeLength(),
+        "Entrópia": huffman.getEntropy(),
         "Hatásfok": huffman.getEfficiency(),
         "Kódolás": coding
     };
