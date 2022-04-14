@@ -12,17 +12,39 @@
 <body>
 <div class="container">
     <h1>Huffman kódolás</h1>
-    <p>A kódolás elkészítéséhez válassza ki az input fájlt!</p>
+    <div class="mb-3">
+        A kódolás elkészítéséhez válassza ki az input fájlt!
+    </div>
+    <div class="mb-3">
+        Az input fájl JSON formátumú és a lentebb elérhető példafájlok felépítését követik.
+        Szükséges a kód ABC elemszámának megadása, továbbá egy lista a forrás ABC elemeivel és azok valószínűségével.
+        A "Feldolgozás eredménye" felirat alatt a feltöltés után meg fog jelenni az eloszlás, a generált kódok,
+        a használt kód ABC elemek, továbbá a számított entrópia, átlagos kódhossz és hatásfok.
+        Amennyiben ezeket az adatokat egy JSON fájlban le kívánja tölteni, a "Letöltés" gombra kattintva ezt megteheti.
+        <br/>
+        A forráskód elérhető a <a href="https://github.com/bbalage/Huffman">https://github.com/bbalage/Huffman</a>
+        linken.
+    </div>
     <div class="mb-3">
         <label for="inputFile" class="form-label">Input fájl</label>
         <input type="file" id="inputFile" onchange="readFile(this)" class="form-control">
     </div>
     <div class="mb-3">
-        <label for="readData" class="form-label">Beolvasott adatok</label>
+        <label for="readData" class="form-label">Feldolgozás eredménye</label>
         <div id="readData" class="bg-light border" style="min-height: 50px"></div>
     </div>
     <div class="mb-3">
         <button class="btn btn-primary" onclick="download()">Letöltés</button>
+    </div>
+    <div class="mb-3">
+        Néhány előre elkészített input fájl az alábbi listában található:
+    </div>
+    <div class="mb-3">
+        <ul>
+           <li><a href="https://bbalage.github.io/Huffman/input_files/input1.json">input1.json</a></li>
+           <li><a href="https://bbalage.github.io/Huffman/input_files/input2.json">input2.json</a></li>
+           <li><a href="https://bbalage.github.io/Huffman/input_files/input3.json">input3.json</a></li>
+        </ul>
     </div>
 </div>
 </body>
