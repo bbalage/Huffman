@@ -77,20 +77,14 @@ class Huffman {
     }
 
     #parseInputFileText(inputText) {
+        // TODO note: Program could be improved with more format checks about the input file.
         const readObj = JSON.parse(inputText);
-        // TODO: Checks!
         this.#createCodeAbc(readObj.numberOfCodeAbcElements);
-        // TODO: Checks!
         this.messageAbc = Object.keys(readObj.dispersion);
         for (let abcElement of this.messageAbc) {
             this.dispersion.push(readObj.dispersion[abcElement]);
         }
-        // Check dispersion validity (sum is one)
-        let sum = 0;
-        for (let prob of this.dispersion) {
-            sum += prob;
-        }
-        if (sum !== 1) {
+        if (this.#isDispersionSumEqualToOne()) {
             alert("Az eloszlás helytelen! A valószínűségek összege nem 1, hanem " + sum);
         }
         this.#orderMessageAbcAndDispersion();
@@ -134,5 +128,13 @@ class Huffman {
                 this.dispersion[minI] = tmp;
             }
         }
+    }
+
+    #isDispersionSumEqualToOne() {
+        let sum = 0;
+        for (let prob of this.dispersion) {
+            sum += prob;
+        }
+        return sum !== 1;
     }
 }
