@@ -93,7 +93,7 @@ class Huffman {
         for (let abcElement of this.messageAbc) {
             this.dispersion.push(readObj.dispersion[abcElement]);
         }
-        // this.#checkIfDistributionSumIsOne();
+        this.#checkIfDistributionSumIsOne();
         this.#orderMessageAbcAndDispersion();
     }
 
