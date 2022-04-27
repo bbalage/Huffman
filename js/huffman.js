@@ -1,6 +1,14 @@
 const ASCII_A = 65;
 const ASCII_ZERO = 48;
 
+function sum_array(numeric_array) {
+    let sum = 0;
+    for (let num of numeric_array) {
+        sum += num;
+    }
+    return sum;
+}
+
 class Huffman {
 
     constructor(inputText) {
@@ -10,6 +18,7 @@ class Huffman {
         this.#parseInputFileText(inputText);
         this.#orderMessageAbcAndDispersion();
         this.codeTree = new CodeTree(this.dispersion, this.codeAbc);
+        console.log(this.codeTree.nodes);
         this.entropy = this.#calcEntropy();
         this.avgCodeLength = this.#calcAvgCodeLength();
         this.efficiency = this.#calcEfficiency();
@@ -84,9 +93,7 @@ class Huffman {
         for (let abcElement of this.messageAbc) {
             this.dispersion.push(readObj.dispersion[abcElement]);
         }
-        if (this.#isDispersionSumEqualToOne()) {
-            alert("Az eloszlás helytelen! A valószínűségek összege nem 1, hanem " + sum);
-        }
+        // this.#checkIfDistributionSumIsOne();
         this.#orderMessageAbcAndDispersion();
     }
 
@@ -130,11 +137,11 @@ class Huffman {
         }
     }
 
-    #isDispersionSumEqualToOne() {
-        let sum = 0;
-        for (let prob of this.dispersion) {
-            sum += prob;
+    #checkIfDistributionSumIsOne() {
+        const sum = Number.parseFloat(sum_array(this.dispersion).toFixed(5));
+        if (sum !== 1) {
+            alert("Az eloszlás helytelen! A valószínűségek összege nem 1, hanem " + sum);
+            throw Error("Incorrect dispersion! Sum of probabilities is not 1. It is: " + sum);
         }
-        return sum !== 1;
     }
 }

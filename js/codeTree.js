@@ -56,10 +56,10 @@ class CodeTree {
             children: children,
             code: undefined
         });
-        this.#addIndexOrdered(currentIndices, newIndex);
-        if (currentIndices.length <= 1) {
+        if (currentIndices.length === 0) {
             return;
         }
+        this.#addIndexOrdered(currentIndices, newIndex);
         this.#mergeElements(currentIndices);
     }
 
@@ -76,11 +76,18 @@ class CodeTree {
     }
 
     #addIndexOrdered(currentIndices, newIndex) {
-        for (let i in currentIndices) {
-            if (this.nodes[currentIndices[i]].prob <= this.nodes[newIndex].prob) {
+        if (this.nodes[newIndex].prob <= this.nodes[currentIndices[0]].prob) {
+            currentIndices.unshift(newIndex);
+            return;
+        }
+        for (let i = 0; i < currentIndices.length - 1; i++) {
+            const ith_node = this.nodes[currentIndices[i]];
+            const i_plus1th_node = this.nodes[currentIndices[i + 1]];
+            if (ith_node.prob <= this.nodes[newIndex].prob && i_plus1th_node.prob >= this.nodes[newIndex].prob) {
                 currentIndices.splice(i + 1, 0, newIndex);
-                break;
+                return;
             }
         }
+        currentIndices.push(newIndex);
     }
 }
