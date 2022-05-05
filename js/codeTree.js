@@ -34,14 +34,14 @@ class CodeTree {
             });
         }
         let currentIndices = Array.from({length: dispersion.length}, (x, i) => i);
-        this.#mergeElements(currentIndices);
+        this.#mergeElements(currentIndices, false);
         this.#setCodes(this.nodes.at(-1), []);
     }
 
-    #mergeElements(currentIndices) {
+    #mergeElements(currentIndices, isNotFirst) {
         let probSum = 0;
         const children = [];
-        const loopStop = Math.min(currentIndices.length, this.branchingFactor);
+        const loopStop = this.#calcLoopStop(currentIndices.length, isNotFirst);
         const newIndex = this.nodes.length;
         for (let i = 0; i < loopStop; i++) {
             const index = currentIndices.shift();
@@ -60,7 +60,24 @@ class CodeTree {
             return;
         }
         this.#addIndexOrdered(currentIndices, newIndex);
-        this.#mergeElements(currentIndices);
+        this.#mergeElements(currentIndices, true);
+    }
+
+    #calcLoopStop(numberOfLeaves, isNotFirst) {
+        if (isNotFirst || this.codeAbc.length === 2) {
+            return this.branchingFactor;
+        }
+        else {
+            const s = this.codeAbc.length;
+            const x = numberOfLeaves % (s - 1);
+            if (x === 1) {
+                return s;
+            } else if (x === 0) {
+                return s - 1;
+            } else {
+                return x;
+            }
+        }
     }
 
     #setCodes(node, prevCodes) {
